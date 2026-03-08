@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flower Eater - Jarvis Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div class="header">
+            <h1>🌸 Flower Eater</h1>
+            <div class="stats-bar">
+                <span>เหลือ: <b id="count">0</b></span>
+                <span>คะแนน: <b id="score">0</b></span>
+            </div>
+        </div>
+
+        <div class="garden-wrapper">
+            <div class="eater e-top-left">🌹</div>
+            <div class="eater e-top-right">🌻</div>
+            <div class="eater e-right-bottom">🌷</div>
+
+            <div id="garden"></div>
+        </div>
+
+        <p id="message">คลิกดอกไม้เพื่อเริ่มสุ่มช่องว่าง!</p>
+        <button id="reset-btn">เริ่มเกมใหม่</button>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
