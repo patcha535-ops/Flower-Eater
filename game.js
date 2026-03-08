@@ -13,7 +13,7 @@ function initGame() {
     
     board = Array(size).fill().map(() => Array(size).fill(null));
 
-    // 1. วางทิวลิป 🌷 ล็อกไว้ที่พิกัดกลาง (3,3) เสมอ
+    // 1. วางทิวลิป 🌷 ล็อกไว้ที่พิกัดกลาง (3,3)
     const mid = 3;
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
@@ -59,12 +59,13 @@ function startRandomGap() {
     document.getElementById("message").innerText = "เริ่มแล้ว! ดันดอกไม้ให้ตรงสีที่มุม";
     render();
     updateCount();
-    checkAllEaters(); 
+    
+    // หมายเหตุ: เอา checkAllEaters() ออกจากตรงนี้เพื่อให้คลิกแรกหายแค่ช่องเดียว
 }
 
 function handleAction(r, c) {
     if (!gameStarted) {
-        startRandomGap(); // คลิกครั้งแรก = สุ่มลบดอกไม้ออก 1 ช่อง
+        startRandomGap(); 
     } else {
         moveFlower(r, c);
     }
@@ -81,7 +82,7 @@ function moveFlower(r, c) {
             board[nr][nc] = flower;
             board[r][c] = null;
             render();
-            checkAllEaters(); // เช็คการกินทุกครั้งที่ขยับ
+            checkAllEaters(); // จะเริ่มกินก็ต่อเมื่อมีการขยับเท่านั้น
             return;
         }
     }
@@ -90,7 +91,7 @@ function moveFlower(r, c) {
 function checkAllEaters() {
     let hasEaten = false;
 
-    // 🔒 ระบบตรวจสอบการกินที่พิกัดมุม (Strict Case)
+    // 🔒 ระบบตรวจสอบการกินที่พิกัดมุมแบบ Strict
     // 1. บนซ้าย (0,0) -> กุหลาบ 🌹
     if (board[0][0] === "🌹") { board[0][0] = null; hasEaten = true; }
     
@@ -114,7 +115,7 @@ function checkAllEaters() {
         document.getElementById("score").innerText = score;
         render();
         updateCount();
-        setTimeout(checkAllEaters, 150); // เช็คซ้ำเผื่อมีตัวใหม่ไหลมาแทนที่
+        setTimeout(checkAllEaters, 150); 
     }
 }
 
