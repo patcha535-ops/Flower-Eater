@@ -9,11 +9,11 @@ function initGame() {
     score = 0;
     gameStarted = false;
     document.getElementById("score").innerText = score;
-    document.getElementById("message").innerText = "คลิกที่ดอกไม้เพื่อเริ่มสุ่มช่องว่าง!";
+    document.getElementById("message").innerText = "คลิกที่ดอกไม้เพื่อสุ่มช่องว่าง!";
     
     board = Array(size).fill().map(() => Array(size).fill(null));
 
-    // 1. วางทิวลิป 🌷 ล็อกไว้ที่พิกัดกลาง (3,3)
+    // 1. ล็อกทิวลิป 🌷 ไว้ที่กลาง (3,3)
     const mid = 3;
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
@@ -44,23 +44,19 @@ function createGrid() {
     }
 }
 
-// ✨ ฟังก์ชันสุ่มหาย 1 ช่อง เมื่อเริ่มเกม
 function startRandomGap() {
     if (gameStarted) return;
-
     let r, c;
     do {
         r = Math.floor(Math.random() * size);
         c = Math.floor(Math.random() * size);
-    } while (r === 3 && c === 3); // ห้ามสุ่มโดนทิวลิปตรงกลาง
+    } while (r === 3 && c === 3); 
 
     board[r][c] = null;
     gameStarted = true;
     document.getElementById("message").innerText = "เริ่มแล้ว! ดันดอกไม้ให้ตรงสีที่มุม";
     render();
     updateCount();
-    
-    // หมายเหตุ: เอา checkAllEaters() ออกจากตรงนี้เพื่อให้คลิกแรกหายแค่ช่องเดียว
 }
 
 function handleAction(r, c) {
@@ -82,7 +78,8 @@ function moveFlower(r, c) {
             board[nr][nc] = flower;
             board[r][c] = null;
             render();
-            checkAllEaters(); // จะเริ่มกินก็ต่อเมื่อมีการขยับเท่านั้น
+            // ✨ ตรวจสอบการกินทันทีหลังจากขยับเสร็จ
+            checkAllEaters(); 
             return;
         }
     }
@@ -91,20 +88,24 @@ function moveFlower(r, c) {
 function checkAllEaters() {
     let hasEaten = false;
 
-    // 🔒 ระบบตรวจสอบการกินที่พิกัดมุมแบบ Strict
-    // 1. บนซ้าย (0,0) -> กุหลาบ 🌹
-    if (board[0][0] === "🌹") { board[0][0] = null; hasEaten = true; }
-    
-    // 2. บนขวา (0,6) -> ทานตะวัน 🌻
-    if (board[0][6] === "🌻") { board[0][6] = null; hasEaten = true; }
-    
-    // 3. ขวาล่าง (6,6) -> ทิวลิป 🌷 (เป้าหมายหลัก)
+    // 🔒 ระบบตรวจสอบมุมแบบ Hard-coded พิกัด (Row, Column)
+    // มุมบนซ้าย (0,0) -> 🌹
+    if (board[0][0] === "🌹") {
+        board[0][0] = null;
+        hasEaten = true;
+    }
+    // มุมบนขวา (0,6) -> 🌻
+    if (board[0][6] === "🌻") {
+        board[0][6] = null;
+        hasEaten = true;
+    }
+    // มุมขวาล่าง (6,6) -> 🌷
     if (board[6][6] === "🌷") {
         board[6][6] = null;
         hasEaten = true;
-        render();
+        render(); // วาดบอร์ดล่าสุดก่อนแจ้งเตือน
         setTimeout(() => {
-            alert("ยินดีด้วยครับคุณ Jarvis! ภารกิจสำเร็จ!");
+            alert("ยอดเยี่ยมมากครับคุณ Jarvis! ภารกิจสำเร็จ!");
             initGame();
         }, 300);
         return;
@@ -115,7 +116,8 @@ function checkAllEaters() {
         document.getElementById("score").innerText = score;
         render();
         updateCount();
-        setTimeout(checkAllEaters, 150); 
+        // 🔁 เช็คซ้ำอีกรอบเผื่อมีตัวใหม่เลื่อนมาอยู่ในตำแหน่งกินทันที
+        setTimeout(checkAllEaters, 100);
     }
 }
 
@@ -138,5 +140,4 @@ function updateCount() {
 }
 
 document.getElementById("reset-btn").onclick = () => initGame();
-
 initGame();
